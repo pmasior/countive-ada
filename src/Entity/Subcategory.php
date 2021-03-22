@@ -32,7 +32,7 @@ class Subcategory
     /**
      * @ORM\Column(type="string", length=25)
      */
-    private $color;
+    private $color = "#3b80ce";
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="subcategories")
