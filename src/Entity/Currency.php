@@ -20,7 +20,7 @@ class Currency
     /**
      * @ORM\Column(type="string", length=3)
      */
-    private $short_name;
+    private $shortName;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -34,12 +34,12 @@ class Currency
 
     public function getShortName(): ?string
     {
-        return $this->short_name;
+        return $this->shortName;
     }
 
-    public function setShortName(string $short_name): self
+    public function setShortName(string $shortName): self
     {
-        $this->short_name = $short_name;
+        $this->shortName = $shortName;
 
         return $this;
     }

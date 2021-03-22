@@ -27,13 +27,13 @@ class Category
     /**
      * @ORM\ManyToOne(targetEntity=Icon::class)
      */
-    private $icon_id;
+    private $icon;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="categories")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user_id;
+    private $user;
 
     /**
      * @ORM\OneToMany(targetEntity=Subcategory::class, mappedBy="category_id", orphanRemoval=true)
@@ -74,26 +74,26 @@ class Category
         return $this;
     }
 
-    public function getIconId(): ?Icon
+    public function getIcon(): ?Icon
     {
-        return $this->icon_id;
+        return $this->icon;
     }
 
-    public function setIconId(?Icon $icon_id): self
+    public function setIcon(?Icon $icon): self
     {
-        $this->icon_id = $icon_id;
+        $this->icon = $icon;
 
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUser(?User $user): self
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
@@ -110,7 +110,7 @@ class Category
     {
         if (!$this->subcategories->contains($subcategory)) {
             $this->subcategories[] = $subcategory;
-            $subcategory->setCategoryId($this);
+            $subcategory->setCategory($this);
         }
 
         return $this;
@@ -120,8 +120,8 @@ class Category
     {
         if ($this->subcategories->removeElement($subcategory)) {
             // set the owning side to null (unless already changed)
-            if ($subcategory->getCategoryId() === $this) {
-                $subcategory->setCategoryId(null);
+            if ($subcategory->getCategory() === $this) {
+                $subcategory->setCategory(null);
             }
         }
 
@@ -140,7 +140,7 @@ class Category
     {
         if (!$this->tags->contains($tag)) {
             $this->tags[] = $tag;
-            $tag->setCategoryId($this);
+            $tag->setCategory($this);
         }
 
         return $this;
@@ -150,8 +150,8 @@ class Category
     {
         if ($this->tags->removeElement($tag)) {
             // set the owning side to null (unless already changed)
-            if ($tag->getCategoryId() === $this) {
-                $tag->setCategoryId(null);
+            if ($tag->getCategory() === $this) {
+                $tag->setCategory(null);
             }
         }
 
@@ -170,7 +170,7 @@ class Category
     {
         if (!$this->categoryBudgets->contains($categoryBudget)) {
             $this->categoryBudgets[] = $categoryBudget;
-            $categoryBudget->setCategoryId($this);
+            $categoryBudget->setCategory($this);
         }
 
         return $this;
@@ -180,8 +180,8 @@ class Category
     {
         if ($this->categoryBudgets->removeElement($categoryBudget)) {
             // set the owning side to null (unless already changed)
-            if ($categoryBudget->getCategoryId() === $this) {
-                $categoryBudget->setCategoryId(null);
+            if ($categoryBudget->getCategory() === $this) {
+                $categoryBudget->setCategory(null);
             }
         }
 

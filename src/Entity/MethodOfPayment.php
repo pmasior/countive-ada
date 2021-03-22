@@ -27,7 +27,7 @@ class MethodOfPayment
     /**
      * @ORM\ManyToOne(targetEntity=Icon::class)
      */
-    private $iconId;
+    private $icon;
 
     /**
      * @ORM\ManyToOne(targetEntity=SettlementAccount::class, inversedBy="methodOfPayments")
@@ -61,14 +61,14 @@ class MethodOfPayment
         return $this;
     }
 
-    public function getIconId(): ?Icon
+    public function getIcon(): ?Icon
     {
-        return $this->iconId;
+        return $this->icon;
     }
 
-    public function setIconId(?Icon $iconId): self
+    public function setIcon(?Icon $icon): self
     {
-        $this->iconId = $iconId;
+        $this->icon = $icon;
 
         return $this;
     }

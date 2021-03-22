@@ -146,7 +146,7 @@ class User implements UserInterface
     {
         if (!$this->categories->contains($category)) {
             $this->categories[] = $category;
-            $category->setUserId($this);
+            $category->setUser($this);
         }
 
         return $this;
@@ -156,8 +156,8 @@ class User implements UserInterface
     {
         if ($this->categories->removeElement($category)) {
             // set the owning side to null (unless already changed)
-            if ($category->getUserId() === $this) {
-                $category->setUserId(null);
+            if ($category->getUser() === $this) {
+                $category->setUser(null);
             }
         }
 
@@ -176,7 +176,7 @@ class User implements UserInterface
     {
         if (!$this->settlementAccounts->contains($settlementAccount)) {
             $this->settlementAccounts[] = $settlementAccount;
-            $settlementAccount->setUserId($this);
+            $settlementAccount->setUser($this);
         }
 
         return $this;
@@ -186,8 +186,8 @@ class User implements UserInterface
     {
         if ($this->settlementAccounts->removeElement($settlementAccount)) {
             // set the owning side to null (unless already changed)
-            if ($settlementAccount->getUserId() === $this) {
-                $settlementAccount->setUserId(null);
+            if ($settlementAccount->getUser() === $this) {
+                $settlementAccount->setUser(null);
             }
         }
 
