@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -34,6 +36,22 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Category::class, mappedBy="user_id", orphanRemoval=true)
+     */
+    private $categories;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SettlementAccount::class, mappedBy="userId", orphanRemoval=true)
+     */
+    private $settlementAccounts;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+        $this->settlementAccounts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -114,5 +132,65 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Category[]
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+            $category->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        if ($this->categories->removeElement($category)) {
+            // set the owning side to null (unless already changed)
+            if ($category->getUserId() === $this) {
+                $category->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SettlementAccount[]
+     */
+    public function getSettlementAccounts(): Collection
+    {
+        return $this->settlementAccounts;
+    }
+
+    public function addSettlementAccount(SettlementAccount $settlementAccount): self
+    {
+        if (!$this->settlementAccounts->contains($settlementAccount)) {
+            $this->settlementAccounts[] = $settlementAccount;
+            $settlementAccount->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSettlementAccount(SettlementAccount $settlementAccount): self
+    {
+        if ($this->settlementAccounts->removeElement($settlementAccount)) {
+            // set the owning side to null (unless already changed)
+            if ($settlementAccount->getUserId() === $this) {
+                $settlementAccount->setUserId(null);
+            }
+        }
+
+        return $this;
     }
 }
