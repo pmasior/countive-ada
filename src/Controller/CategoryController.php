@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Form\CategoryType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -42,6 +43,32 @@ class CategoryController extends AbstractController
 
         return $this->json([
             'message' => 'Category created, id = ' . $category->getId(),
+        ]);
+    }
+
+
+    /**
+     * @Route("/add1", name="_add1")
+     * @param EntityManagerInterface $entityManager
+     * @param UserRepository $userRepository
+     * @param Request $request
+     * @return Response
+     */
+    public function add1(EntityManagerInterface $entityManager, UserRepository $userRepository, Request $request): Response
+    {
+        $category = new Category();
+        $form = $this->createForm(CategoryType::class, $category);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $category = $form->getData();
+            $entityManager->persist($category);
+            $entityManager->flush();
+            return $this->redirect("/");
+        }
+
+        return $this->render('category/add1.html.twig', [
+            'category_form' => $form->createView()
         ]);
     }
 }
