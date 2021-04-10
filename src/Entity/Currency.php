@@ -58,6 +58,6 @@ class Currency
 
     public function __toString(): String
     {
-        return $this->name;  // TODO: zmienić na id
+        return $this->shortName;
     }
 }

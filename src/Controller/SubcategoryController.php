@@ -16,16 +16,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class SubcategoryController extends AbstractController
 {
     /**
-     * @Route("/add", name="_add")
+     * @Route("/create", name="_create")
      */
-    public function add(Request $request, FormGenerator $formGenerator): Response
+    public function create(Request $request, FormGenerator $formGenerator): Response
     {
         return $formGenerator->returnCreateForm(
             $request,
             Subcategory::class,
             SubcategoryType::class,
             "/",
-            "formGenerator/add.html.twig"
+            "formGenerator/create.html.twig"
         );
     }
 }

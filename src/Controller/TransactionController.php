@@ -17,16 +17,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class TransactionController extends AbstractController
 {
     /**
-     * @Route("/add", name="_add")
+     * @Route("/create", name="_create")
      */
-    public function add(Request $request, FormGenerator $formGenerator): Response
+    public function create(Request $request, FormGenerator $formGenerator): Response
     {
         return $formGenerator->returnCreateForm(
             $request,
             Transaction::class,
             TransactionType::class,
             "/",
-            "formGenerator/add.html.twig"
+            "formGenerator/create.html.twig"
         );
     }
 }

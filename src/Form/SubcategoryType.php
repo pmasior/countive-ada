@@ -2,10 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Category;
-use App\Entity\Icon;
 use App\Entity\Subcategory;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,14 +15,8 @@ class SubcategoryType extends AbstractType
         $builder
             ->add('name')
             ->add('color')
-            ->add('icon', EntityType::class, [
-                'class' => Icon::class,
-                'choice_label' => 'id'
-            ])
-            ->add('category', EntityType::class, [
-                'class' => Category::class,
-                'choice_label'=> 'id'
-            ])
+            ->add('icon')
+            ->add('category')
             ->add('submit', SubmitType::class)
         ;
     }
