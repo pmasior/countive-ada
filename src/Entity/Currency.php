@@ -55,4 +55,9 @@ class Currency
 
         return $this;
     }
+
+    public function __toString(): String
+    {
+        return $this->id;
+    }
 }
