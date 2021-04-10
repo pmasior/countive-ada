@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\SubcategoryBudgetRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=SubcategoryBudgetRepository::class)
+ * @ApiResource()
  */
 class SubcategoryBudget
 {
