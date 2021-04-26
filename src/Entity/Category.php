@@ -2,15 +2,72 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CategoryRepository;
+use App\Validator\IsValidOwner;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
+
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/* TODO:
+ *              "security" = "is_granted('CATEGORY_CREATE', object)"
+ *              "security" = "is_granted('CATEGORY_RETRIEVE', object)"
+ * use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+ * @ApiFilter(
+ *     SearchFilter::class,
+ *     properties={
+ *          "name": "partial",
+ *          "subcategories": "exact",
+ *          "subcategories.name": "partial"
+ *     }
+ * )
+*/
 
 /**
+ * @ApiResource(
+ *     securityMessage="Only owner can perform this operation.",
+ *     collectionOperations={
+ *          "get" = {
+ *              "security" = "is_granted('ROLE_USER')"
+ *          },
+ *          "post" = {
+ *              "security" = "is_granted('ROLE_USER')",
+ *              "denormalization_context" = {"groups"={"category:write", "category:collection:post"}}
+ *          }
+ *      },
+ *     itemOperations={
+ *          "get"={
+ *              "normalization_context"={"groups"={"category:read", "category:item:get"}},
+ *              "security" = "is_granted('CATEGORY_RETRIEVE', object)"
+ *          },
+ *          "put" = {
+ *              "security" = "is_granted('CATEGORY_REPLACE', object)"
+ *
+ *          },
+ *          "patch" = {
+ *              "security" = "is_granted('CATEGORY_UPDATE', object)"
+ *          },
+ *          "delete" = {
+ *              "security" = "is_granted('CATEGORY_REMOVE', object)"
+ *          }
+ *     },
+ *     normalizationContext={"groups"={"category:read"}},
+ *     denormalizationContext={"groups"={"category:write"}},
+ *     attributes={
+ *          "formats"={
+ *              "jsonld", "json", "html", "csv"={"text/csv"}, "yaml"={"text/yaml"}
+ *          }
+ *     }
+ * )
+ * @ApiFilter(PropertyFilter::class)
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
- * @ApiResource()
+ * @ORM\EntityListeners({"App\Doctrine\CategorySetOwnerListener"})
  */
 class Category
 {
@@ -22,32 +79,48 @@ class Category
     private $id;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Length(max=100)
+     * @Groups({"category:read", "category:write"})
      * @ORM\Column(type="string", length=100)
      */
     private $name;
 
     /**
+     * @Assert\Valid()
+     * @Groups({"category:read", "category:write"})
      * @ORM\ManyToOne(targetEntity=Icon::class)
      */
     private $icon;
 
+//     TODO: is needed? @Assert\Valid() (also in other entities)
     /**
+     * @Assert\Valid()
+     * @IsValidOwner()
+     * @Groups({"category:read", "category:collection:post"})
      * @ORM\ManyToOne(targetEntity=UserAccount::class, inversedBy="categories")
      * @ORM\JoinColumn(nullable=false)
+     * @SerializedName("user")
      */
     private $userAccount;
 
     /**
+     * @Assert\Valid()
+     * @Groups({"category:read", "category:write"})
      * @ORM\OneToMany(targetEntity=Subcategory::class, mappedBy="category", orphanRemoval=true)
      */
     private $subcategories;
 
     /**
+     * @Assert\Valid()
+     * @Groups({"category:read", "category:write"})
      * @ORM\OneToMany(targetEntity=Tag::class, mappedBy="category", orphanRemoval=true)
      */
     private $tags;
 
     /**
+     * @Assert\Valid()
+     * @Groups({"category:read", "category:write"})
      * @ORM\OneToMany(targetEntity=CategoryBudget::class, mappedBy="category", orphanRemoval=true)
      */
     private $categoryBudgets;

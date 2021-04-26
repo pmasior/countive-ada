@@ -2,16 +2,46 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserAccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * @ApiResource(
+ *     securityMessage="Only owner can perform this operation.",
+ *     collectionOperations={
+ *          "post" = {
+ *              "security" = "is_granted('IS_AUTHENTICATED_ANONYMOUSLY')",
+ *              "validation_groups" = {"Default", "user:create"}
+ *          }
+ *     },
+ *     itemOperations={
+ *          "get" = {
+ *              "security" = "is_granted('ROLE_USER') and object == user"
+ *          },
+ *          "put" = {
+ *              "security" = "is_granted('ROLE_USER') and object == user"
+ *          },
+ *          "delete" = {
+ *              "security" = "is_granted('ROLE_USER') and object == user"
+ *          }
+ *     },
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}},
+ *     shortName="users"
+ * )
+ * @ApiFilter(PropertyFilter::class)
  * @ORM\Entity(repositoryClass=UserAccountRepository::class)
- * @ApiResource()
+ * @UniqueEntity("email")
  */
 class UserAccount implements UserInterface
 {
@@ -23,6 +53,10 @@ class UserAccount implements UserInterface
     private $id;
 
     /**
+     * @Assert\Email()
+     * @Assert\Length(max=180)
+     * @Assert\NotBlank
+     * @Groups({"user:read", "user:write"})
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
@@ -34,16 +68,29 @@ class UserAccount implements UserInterface
 
     /**
      * @var string The hashed password
+     * @Assert\Length(max=255)
      * @ORM\Column(type="string")
      */
     private $password;
 
     /**
+     * @Assert\NotBlank(groups={"user:create"})
+     * @Groups({"user:write"})
+     * @SerializedName("password")
+     */
+    private $plainPassword;
+
+
+    /**
+     * @Assert\Valid()
+     * @Groups({"user:read", "user:write"})
      * @ORM\OneToMany(targetEntity=Category::class, mappedBy="userAccount", orphanRemoval=true)
      */
     private $categories;
 
     /**
+     * @Assert\Valid()
+     * @Groups({"user:read", "user:write"})
      * @ORM\OneToMany(targetEntity=SettlementAccount::class, mappedBy="userAccount", orphanRemoval=true)
      */
     private $settlementAccounts;
@@ -115,6 +162,18 @@ class UserAccount implements UserInterface
         return $this;
     }
 
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
     /**
      * Returning a salt is only needed, if you are not using a modern
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
@@ -132,7 +191,7 @@ class UserAccount implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+         $this->plainPassword = null;
     }
 
     /**

@@ -2,13 +2,45 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\SubcategoryBudgetRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * @ApiResource(
+ *     securityMessage="Only owner can perform this operation.",
+ *     collectionOperations={
+ *          "get" = {
+ *              "security" = "is_granted('ROLE_USER')"
+ *          },
+ *          "post" = {
+ *              "security" = "is_granted('ROLE_USER')"
+ *          }
+ *      },
+ *     itemOperations={
+ *          "get"={
+ *              "security" = "is_granted('ROLE_USER') and object.getSubcategory().getCategory().getUserAccount() == user"
+ *          },
+ *          "put" = {
+ *              "security" = "is_granted('ROLE_USER') and object.getSubcategory().getCategory().getUserAccount() == user"
+ *          },
+ *          "patch" = {
+ *              "security" = "is_granted('ROLE_USER') and object.getSubcategory().getCategory().getUserAccount() == user"
+ *          },
+ *          "delete" = {
+ *              "security" = "is_granted('ROLE_USER') and object.getSubcategory().getCategory().getUserAccount() == user"
+ *          }
+ *     },
+ *     normalizationContext={"groups"={"subcategoryBudget:read"}},
+ *     denormalizationContext={"groups"={"subcategoryBudget:write"}},
+ * )
+ * @ApiFilter(PropertyFilter::class)
  * @ORM\Entity(repositoryClass=SubcategoryBudgetRepository::class)
- * @ApiResource()
+ * @ORM\EntityListeners({"App\Doctrine\SettlementAccountSetOwnerListener"})
  */
 class SubcategoryBudget
 {
@@ -20,22 +52,35 @@ class SubcategoryBudget
     private $id;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Regex(
+     *     pattern="/\d{1,13}\.?\d{0,8}/",
+     *     message="This value is incorrect. It should have scale = 8 and precision = 21"
+     * )
+     * @Groups({"subcategory:read", "subcategory:write", "category:item:get"})
      * @ORM\Column(type="decimal", precision=21, scale=8)
      */
     private $amount;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Valid()
+     * @Groups({"subcategory:read", "subcategory:write", "category:item:get"})
      * @ORM\ManyToOne(targetEntity=Subcategory::class, inversedBy="subcategoryBudgets")
      * @ORM\JoinColumn(nullable=false)
      */
     private $subcategory;
 
     /**
+     * @Assert\NotBlank
+     * @Groups({"subcategory:read", "subcategory:write", "category:item:get"})
      * @ORM\Column(type="datetimetz")
      */
     private $since;
 
     /**
+     * @Assert\NotBlank
+     * @Groups({"subcategory:read", "subcategory:write", "category:item:get"})
      * @ORM\Column(type="datetimetz")
      */
     private $until;

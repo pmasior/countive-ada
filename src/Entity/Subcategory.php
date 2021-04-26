@@ -2,15 +2,47 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\SubcategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * @ApiResource(
+ *     securityMessage="Only owner can perform this operation.",
+ *     collectionOperations={
+ *          "get" = {
+ *              "security" = "is_granted('ROLE_USER')"
+ *          },
+ *          "post" = {
+ *              "security" = "is_granted('ROLE_USER')"
+ *          }
+ *      },
+ *     itemOperations={
+ *          "get"={
+ *              "security" = "is_granted('ROLE_USER') and object.getCategory().getUserAccount() == user"
+ *          },
+ *          "put" = {
+ *              "security" = "is_granted('ROLE_USER') and object.getCategory().getUserAccount() == user"
+ *          },
+ *          "patch" = {
+ *              "security" = "is_granted('ROLE_USER') and object.getCategory().getUserAccount() == user"
+ *          },
+ *          "delete" = {
+ *              "security" = "is_granted('ROLE_USER') and object.getCategory().getUserAccount() == user"
+ *          }
+ *     },
+ *     normalizationContext={"groups"={"subcategory:read"}},
+ *     denormalizationContext={"groups"={"subcategory:write"}},
+ * )
+ * @ApiFilter(PropertyFilter::class)
  * @ORM\Entity(repositoryClass=SubcategoryRepository::class)
- * @ApiResource()
  */
 class Subcategory
 {
@@ -22,32 +54,47 @@ class Subcategory
     private $id;
 
     /**
+     * @Assert\Length(max=100)
+     * @Assert\NotBlank
+     * @Groups({"subcategory:read", "subcategory:write", "category:item:get"})
      * @ORM\Column(type="string", length=100)
      */
     private $name;
 
     /**
+     * @Assert\Valid()
+     * @Groups({"subcategory:read", "subcategory:write"})
      * @ORM\ManyToOne(targetEntity=Icon::class)
      */
     private $icon;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Length(max=25)
+     * @Groups({"subcategory:read", "subcategory:write"})
      * @ORM\Column(type="string", length=25)
      */
     private $color;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Valid()
+     * @Groups({"subcategory:read", "subcategory:write"})
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="subcategories")
      * @ORM\JoinColumn(nullable=false)
      */
     private $category;
 
     /**
+     * @Assert\Valid()
+     * @Groups({"subcategory:read", "subcategory:write"})
      * @ORM\OneToMany(targetEntity=SubcategoryBudget::class, mappedBy="subcategory", orphanRemoval=true)
      */
     private $subcategoryBudgets;
 
     /**
+     * @Assert\Valid()
+     * @Groups({"subcategory:read", "subcategory:write"})
      * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="subcategory", orphanRemoval=true)
      */
     private $transactions;

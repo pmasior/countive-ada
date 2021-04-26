@@ -2,15 +2,62 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\TransactionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * @ApiResource(
+ *     securityMessage="Only owner can perform this operation.",
+ *     collectionOperations={
+ *          "get" = {
+ *              "security" = "is_granted('ROLE_USER')"
+ *          },
+ *          "post" = {
+ *              "security" = "is_granted('ROLE_USER')"
+ *          }
+ *      },
+ *     itemOperations={
+ *          "get"={
+ *              "security" = "is_granted('ROLE_USER') and object.getSubcategory().getCategory().getUserAccount() == user"
+ *          },
+ *          "put" = {
+ *              "security" = "is_granted('ROLE_USER') and object.getSubcategory().getCategory().getUserAccount() == user"
+ *          },
+ *          "patch" = {
+ *              "security" = "is_granted('ROLE_USER') and object.getSubcategory().getCategory().getUserAccount() == user"
+ *          },
+ *          "delete" = {
+ *              "security" = "is_granted('ROLE_USER') and object.getSubcategory().getCategory().getUserAccount() == user"
+ *          }
+ *     },
+ *     normalizationContext={"groups"={"transaction:read"}},
+ *     denormalizationContext={"groups"={"transaction:write"}},
+ * )
+ * @ApiFilter(DateFilter::class, properties={"addedAt"})
+ * @ApiFilter(PropertyFilter::class)
+ * @ApiFilter(
+ *     SearchFilter::class,
+ *     properties={
+ *          "amount": "partial",
+ *          "currency": "exact",
+ *          "tags": "partial",
+ *          "note": "partial",
+ *          "settlementAccount.name": "partial",
+ *          "methodOfPayment.name": "partial",
+ *          "subcategory.category.name": "partial",
+ *          "subcategory.name": "partial"
+ *     }
+ * )
  * @ORM\Entity(repositoryClass=TransactionRepository::class)
- * @ApiResource()
  */
 class Transaction
 {
@@ -22,44 +69,67 @@ class Transaction
     private $id;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Regex(
+     *     pattern="/\d{1,13}\.?\d{0,8}/",
+     *     message="This value is incorrect. It should have scale = 8 and precision = 21"
+     * )
+     * @Groups({"transaction:read", "transaction:write"})
      * @ORM\Column(type="decimal", precision=21, scale=8)
      */
     private $amount;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Valid()
+     * @Groups({"transaction:read", "transaction:write"})
      * @ORM\ManyToOne(targetEntity=Currency::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $currency;
 
     /**
+     * @Assert\NotBlank
+     * @Groups({"transaction:read", "transaction:write"})
      * @ORM\Column(type="datetimetz")
      */
     private $addedAt;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Valid()
+     * @Groups({"transaction:read", "transaction:write"})
      * @ORM\ManyToOne(targetEntity=Subcategory::class, inversedBy="transactions")
      * @ORM\JoinColumn(nullable=false)
      */
     private $subcategory;
 
     /**
+     * @Assert\Valid()
+     * @Groups({"transaction:read", "transaction:write"})
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="transactions")
      */
     private $tags;
 
     /**
+     * @Assert\Length(max=255)
+     * @Groups({"transaction:read", "transaction:write"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $note;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Valid()
+     * @Groups({"transaction:read", "transaction:write"})
      * @ORM\ManyToOne(targetEntity=SettlementAccount::class, inversedBy="transactions")
      * @ORM\JoinColumn(nullable=false)
      */
     private $settlementAccount;
 
     /**
+     * @Assert\Valid()
+     * @Groups({"transaction:read", "transaction:write"})
      * @ORM\ManyToOne(targetEntity=MethodOfPayment::class, inversedBy="transactions")
      */
     private $methodOfPayment;

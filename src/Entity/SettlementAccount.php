@@ -2,15 +2,48 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\SettlementAccountRepository;
+use App\Validator\IsValidOwner;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * @ApiResource(
+ *     securityMessage="Only owner can perform this operation.",
+ *     collectionOperations={
+ *          "get" = {
+ *              "security" = "is_granted('ROLE_USER')"
+ *          },
+ *          "post" = {
+ *              "security" = "is_granted('ROLE_USER')"
+ *          }
+ *      },
+ *     itemOperations={
+ *          "get"={
+ *              "security" = "is_granted('ROLE_USER') and object.getUserAccount() == user"
+ *          },
+ *          "put" = {
+ *              "security" = "is_granted('ROLE_USER') and object.getUserAccount() == user"
+ *          },
+ *          "patch" = {
+ *              "security" = "is_granted('ROLE_USER') and object.getUserAccount() == user"
+ *          },
+ *          "delete" = {
+ *              "security" = "is_granted('ROLE_USER') and object.getUserAccount() == user"
+ *          }
+ *     },
+ *     normalizationContext={"groups"={"settlementAccount:read"}},
+ *     denormalizationContext={"groups"={"settlementAccount:write"}},
+ * )
+ * @ApiFilter(PropertyFilter::class)
  * @ORM\Entity(repositoryClass=SettlementAccountRepository::class)
- * @ApiResource()
  */
 class SettlementAccount
 {
@@ -22,27 +55,41 @@ class SettlementAccount
     private $id;
 
     /**
+     * @Assert\Length(max=255)
+     * @Assert\NotBlank
+     * @Groups({"settlementAccount:read", "settlementAccount:write"})
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @Assert\Length(max=25)
+     * @Assert\NotBlank
+     * @Groups({"settlementAccount:read", "settlementAccount:write"})
      * @ORM\Column(type="string", length=25)
      */
     private $color;
 
     /**
+     * @Assert\Valid()
+     * @IsValidOwner()
+     * @Groups({"settlementAccount:read", "settlementAccount:write"})
      * @ORM\ManyToOne(targetEntity=UserAccount::class, inversedBy="settlementAccounts")
      * @ORM\JoinColumn(nullable=false)
+     * @SerializedName("user")
      */
     private $userAccount;
 
     /**
+     * @Assert\Valid()
+     * @Groups({"settlementAccount:read", "settlementAccount:write"})
      * @ORM\OneToMany(targetEntity=MethodOfPayment::class, mappedBy="settlementAccount")
      */
     private $methodOfPayments;
 
     /**
+     * @Assert\Valid()
+     * @Groups({"settlementAccount:read", "settlementAccount:write"})
      * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="settlementAccount", orphanRemoval=true)
      */
     private $transactions;
