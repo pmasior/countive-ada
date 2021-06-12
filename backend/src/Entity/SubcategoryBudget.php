@@ -65,7 +65,7 @@ class SubcategoryBudget
     /**
      * @Assert\NotBlank
      * @Assert\Valid()
-     * @Groups({"subcategory:read", "subcategory:write", "category:item:get"})
+     * @Groups({"category:item:get"})
      * @ORM\ManyToOne(targetEntity=Subcategory::class, inversedBy="subcategoryBudgets")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -73,14 +73,14 @@ class SubcategoryBudget
 
     /**
      * @Assert\NotBlank
-     * @Groups({"subcategory:read", "subcategory:write", "category:item:get"})
+     * @Groups({"category:item:get"})
      * @ORM\Column(type="datetimetz")
      */
     private $since;
 
     /**
      * @Assert\NotBlank
-     * @Groups({"subcategory:read", "subcategory:write", "category:item:get"})
+     * @Groups({"category:item:get"})
      * @ORM\Column(type="datetimetz")
      */
     private $until;
