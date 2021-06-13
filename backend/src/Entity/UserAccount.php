@@ -82,14 +82,12 @@ class UserAccount implements UserInterface
 
 
     /**
-     * @Assert\Valid()
      * @Groups({"user:read", "user:write"})
      * @ORM\OneToMany(targetEntity=Category::class, mappedBy="userAccount", orphanRemoval=true)
      */
     private $categories;
 
     /**
-     * @Assert\Valid()
      * @Groups({"user:read", "user:write"})
      * @ORM\OneToMany(targetEntity=SettlementAccount::class, mappedBy="userAccount", orphanRemoval=true)
      */

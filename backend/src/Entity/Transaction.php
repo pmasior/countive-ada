@@ -97,7 +97,6 @@ class Transaction
 
     /**
      * @Assert\NotBlank
-     * @Assert\Valid()
      * @Groups({"transaction:read", "transaction:write"})
      * @ORM\ManyToOne(targetEntity=Subcategory::class, inversedBy="transactions")
      * @ORM\JoinColumn(nullable=false)

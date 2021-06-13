@@ -81,14 +81,12 @@ class SettlementAccount
     private $userAccount;
 
     /**
-     * @Assert\Valid()
      * @Groups({"settlementAccount:read", "settlementAccount:write"})
      * @ORM\OneToMany(targetEntity=MethodOfPayment::class, mappedBy="settlementAccount")
      */
     private $methodOfPayments;
 
     /**
-     * @Assert\Valid()
      * @Groups({"settlementAccount:read", "settlementAccount:write"})
      * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="settlementAccount", orphanRemoval=true)
      */

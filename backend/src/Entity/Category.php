@@ -105,21 +105,18 @@ class Category
     private $userAccount;
 
     /**
-     * @Assert\Valid()
      * @Groups({"category:read", "category:write"})
      * @ORM\OneToMany(targetEntity=Subcategory::class, mappedBy="category", orphanRemoval=true)
      */
     private $subcategories;
 
     /**
-     * @Assert\Valid()
      * @Groups({"category:read", "category:write"})
      * @ORM\OneToMany(targetEntity=Tag::class, mappedBy="category", orphanRemoval=true)
      */
     private $tags;
 
     /**
-     * @Assert\Valid()
      * @Groups({"category:read", "category:write"})
      * @ORM\OneToMany(targetEntity=CategoryBudget::class, mappedBy="category", orphanRemoval=true)
      */

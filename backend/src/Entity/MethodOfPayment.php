@@ -75,7 +75,6 @@ class MethodOfPayment
     private $settlementAccount;
 
     /**
-     * @Assert\Valid()
      * @Groups({"methodOfPayment:read", "methodOfPayment:write"})
      * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="methodOfPayment")
      */

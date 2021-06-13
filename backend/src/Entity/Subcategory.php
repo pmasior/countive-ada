@@ -86,14 +86,12 @@ class Subcategory
     private $category;
 
     /**
-     * @Assert\Valid()
      * @Groups({"subcategory:read", "subcategory:write"})
      * @ORM\OneToMany(targetEntity=SubcategoryBudget::class, mappedBy="subcategory", orphanRemoval=true)
      */
     private $subcategoryBudgets;
 
     /**
-     * @Assert\Valid()
      * @Groups({"subcategory:read", "subcategory:write"})
      * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="subcategory", orphanRemoval=true)
      */
