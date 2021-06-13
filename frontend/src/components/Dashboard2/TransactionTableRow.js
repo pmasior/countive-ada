@@ -13,14 +13,9 @@ export default function TransactionTableRow(props) {
         <i className={`${findIcon(t.subcategory)} card-img-top h5 m-0`}
            style={{'color': t.subcategory.color}} />
       </td>
-      <td>{t.tags}</td>  {/* TODO: tablica z tagami */}
-      {t.tags && t.tags.map(tag =>
-        <span className="badge bg-secondary">tag.name</span>
-      )}
       <td>{t.settlementAccount ? t.settlementAccount.name : null}</td>
       <td>{t.methodOfPayment ? t.methodOfPayment.name : null}</td>
       <td>{t.note}</td>
-      {/*TODO: data */}
       <td>
         {t.amount.replace(/\.?0+$/, '')}
         {" "}

@@ -41,10 +41,8 @@ export default function TransactionEditor(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // alert("1 " + JSON.stringify(formState, null, 2));  // TODO: delete alert
     Object.keys(formState).forEach((key) =>
       (formState[key] === null || formState[key] === "") && delete formState[key]);
-    // alert("2 " + JSON.stringify(formState, null, 2));  // TODO: delete alert
     props.saveCallback(formState);
   }
 
@@ -123,13 +121,6 @@ export default function TransactionEditor(props) {
                   <label>subcategory</label>
                 </div>
                 <div className="form-group form-floating mb-3">
-                  <select className="form-select" multiple name="tags" aria-label="tags"
-                          onChange={handleChange}>
-                    <option value={formState.tags}>{formState.tags.name}</option>
-                  </select>
-                  <label>tags</label>  {/* TODO: naprawić tagi */}
-                </div>
-                <div className="form-group form-floating mb-3">
                   <input className="form-control" name="note" type="text"
                          value={formState.note}
                          onChange={handleChange} />
@@ -193,7 +184,7 @@ export default function TransactionEditor(props) {
 }
 
 TransactionEditor.propTypes = {
-  transaction: PropTypes.object,  //TODO: array or object
+  transaction: PropTypes.object,
   saveCallback: PropTypes.func,
   cancelCallback: PropTypes.func
 }

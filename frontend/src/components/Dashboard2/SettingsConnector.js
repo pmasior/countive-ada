@@ -32,6 +32,5 @@ export default function SettingsConnector() {
 
   return withRouter(connect(mapStateToProps, mapDispatchToProps, mergeProps)(
     DataGetter(DataTypes.TRANSACTIONS, SettingsDisplay)));
-//  TODO: change DataTypes.TRANSACTIONS i change w DatTypes zwracane obiekty
 }
 

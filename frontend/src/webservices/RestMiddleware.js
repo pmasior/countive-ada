@@ -45,7 +45,6 @@ export const createRestMiddleware = (categoriesURL,
             }
             break;
           case ActionTypes.STORE:
-            // action.payload['@id'] = null;  // TODO: delete?
             dataSources[action.dataType].store(action.payload, data =>
               next({...action, payload: data }));
             break;

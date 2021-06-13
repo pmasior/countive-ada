@@ -3,8 +3,8 @@ import {login} from "../../webservices/userAccount";
 import {NavLink, withRouter} from "react-router-dom";
 
 export const Login = withRouter((props) => {
-  const [eMail, setEMail] = useState('example@example.com');  // TODO: change default value to ''
-  const [password, setPassword] = useState('qwerty123');  // TODO: change default value to ''
+  const [eMail, setEMail] = useState('');
+  const [password, setPassword] = useState('');
   const [loginResult, setLoginResult] = useState(null);
 
   const handleSubmit = (e) => {

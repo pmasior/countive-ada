@@ -23,10 +23,8 @@ export default function SubcategoryEditor(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // alert("1 " + JSON.stringify(formState, null, 2));  // TODO: delete alert
     Object.keys(formState).forEach((key) =>
       (formState[key] === null || formState[key] === "") && delete formState[key]);
-    // alert("2 " + JSON.stringify(formState, null, 2));  // TODO: delete alert
     props.saveCallback(formState);
   }
 

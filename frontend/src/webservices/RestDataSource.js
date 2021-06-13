@@ -10,24 +10,23 @@ export class RestDataSource {
     this.sendRequest("get", this.BASE_URL, callback);
   }
 
-  getOne(id, callback) {  // TODO: powinno być poprzedzone async? s.637
-    this.sendRequest("get", `${this.BASE_URL}/${id}`, callback);  // TODO: niepoprawny odczyt ['@id']
+  getOne(id, callback) {
+    this.sendRequest("get", `${this.BASE_URL}/${id}`, callback);
   }
 
-  store(data, callback) {  // TODO: powinno być poprzedzone async? s.637
+  store(data, callback) {
     this.sendRequest("post", this.BASE_URL, callback, data);
   }
 
-  update(data, callback) {  // TODO: powinno być poprzedzone async? s.637
+  update(data, callback) {
     this.sendRequest("put", `${this.BASE_URL}/${data['@id'].replace(/\/api\/.*\//i, '')}`, callback, data);
   }
 
-  delete(data, callback) {  // TODO: powinno być poprzedzone async? s.637
+  delete(data, callback) {
     this.sendRequest("delete", `http://localhost:8000${data['@id']}`, callback, null);
   }
 
   async sendRequest(method, url, callback, data) {
-
     let response;
     try {
       response = await axios.request({

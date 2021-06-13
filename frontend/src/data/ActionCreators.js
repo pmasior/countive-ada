@@ -12,7 +12,6 @@ export const deleteData = (dataType, payload) => ({
 });
 
 export const saveData = (dataType, payload) => {
-  // alert(`saveData: ${JSON.stringify(dataType, null, 2)}`);  // TODO: delete alert
   if (payload['@id']) {
     return {
       type: ActionTypes.UPDATE,

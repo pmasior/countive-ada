@@ -30,8 +30,6 @@ function App() {
           <Redirect to="/error/404/Page not found" />
         </Switch>
       </BrowserRouter>
-    {/*<StoreAccessForDebug store={CountiveDataStore} />*/}
-    {/* TODO: delete debug dataStore */}
     </Provider>
   );
 }

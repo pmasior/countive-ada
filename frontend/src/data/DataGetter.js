@@ -9,6 +9,13 @@ export const DataGetter = (dataType, WrappedComponent) => {
     }
 
     componentDidMount() {
+      if (WrappedComponent === SettingsDisplay) {
+        this.props.getData(DataTypes.SUBCATEGORIES);
+        this.props.getData(DataTypes.METHOD_OF_PAYMENTS);
+        this.props.getData(DataTypes.SETTLEMENT_ACCOUNTS);
+        this.props.getData(DataTypes.ICONS);
+        return;
+      }
       if (dataType === DataTypes.CATEGORIES && WrappedComponent !== SettingsDisplay) {
         this.props.getData(DataTypes.CATEGORIES);
       }
@@ -21,14 +28,6 @@ export const DataGetter = (dataType, WrappedComponent) => {
         this.props.getData(DataTypes.CURRENCIES);
         this.props.getData(DataTypes.METHOD_OF_PAYMENTS);
         this.props.getData(DataTypes.SETTLEMENT_ACCOUNTS);
-      }
-      if (WrappedComponent === SettingsDisplay) {
-        // this.props.getData(DataTypes.CATEGORIES);
-        this.props.getData(DataTypes.SUBCATEGORIES);
-        this.props.getData(DataTypes.METHOD_OF_PAYMENTS);
-        this.props.getData(DataTypes.SETTLEMENT_ACCOUNTS);
-        this.props.getData(DataTypes.ICONS);
-
       }
     }
   }
