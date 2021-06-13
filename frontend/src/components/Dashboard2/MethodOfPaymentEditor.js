@@ -9,7 +9,7 @@ export default function MethodOfPaymentEditor(props) {
     settlementAccount: props.methodOfPayment ? props.methodOfPayment.settlementAccount : "",
   })
 
-  const [settlementAccounts, setSettlementAccounts] = useState(props.settlementAccounts);
+  const [settlementAccounts] = useState(props.settlementAccounts);
 
   const handleChange = ({target}) => {
     const { name, value } = target;

@@ -26,6 +26,7 @@ function App() {
           <Route path="/:category/:mode(edit|create)//:api?/:datatype?/:id?" component={Dashboard} />
           <Route path="/:category/:subcategory/:mode(edit|create)//:api?/:datatype?/:id?" component={Dashboard} />
           <Route path="/:category/:subcategory?" component={Dashboard} />
+          <Redirect from="/" to="/login" />
           <Redirect to="/error/404/Page not found" />
         </Switch>
       </BrowserRouter>

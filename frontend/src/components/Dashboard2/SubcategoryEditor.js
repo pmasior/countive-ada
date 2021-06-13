@@ -10,8 +10,8 @@ export default function SubcategoryEditor(props) {
     category: props.subcategory ? props.subcategory.category : "",
   })
 
-  const [categories, setCategories] = useState(props.categories);
-  const [icons, setIcons] = useState(props.icons);
+  const [categories] = useState(props.categories);
+  const [icons] = useState(props.icons);
 
   const handleChange = ({target}) => {
     const { name, value } = target;

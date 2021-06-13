@@ -42,13 +42,13 @@ export class RequestError extends React.Component {
                 </div>
                 <div className="modal-footer d-flex">
                   <span className="flex-grow-1" />
-                  {this.props.match.params.code === "401" &&
+                  {this.props.match.params.code === "401" ?
                     <button type="button" className="btn btn-secondary"
                             data-bs-dismiss="modal"
                             onClick={this.goToLogin}>
                       Go to login
                     </button>
-                    ||
+                    :
                     <button type="button" className="btn btn-secondary"
                             onClick={this.cancelCallback}>
                       Go to dashboard

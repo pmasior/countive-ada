@@ -15,13 +15,13 @@ export default function TransactionEditor(props) {
       (props.transaction.methodOfPayment ? props.transaction.methodOfPayment['@id'] : "") : "",
   })
 
-  const [settlementAccounts, setSettlementAccounts] = useState(props.settlementAccounts);
-  const [currencies, setCurrencies] = useState(props.currencies);
-  const [subcategories, setSubcategories] = useState(props.subcategories);
-  const [methodOfPayments, setMethodOfPayments] = useState(props.methodOfPayments);
+  const [settlementAccounts] = useState(props.settlementAccounts);
+  const [currencies] = useState(props.currencies);
+  const [subcategories] = useState(props.subcategories);
+  const [methodOfPayments] = useState(props.methodOfPayments);
 
   if (formState.subcategory === "") {
-    formState.subcategory = subcategories.map(s => {
+    subcategories.forEach(s => {
         if (props.match.params.subcategory === s.name.toLowerCase()) {
           setFormState((prev) => ({
             ...prev,
