@@ -18,33 +18,4 @@ class SubcategoryBudgetRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, SubcategoryBudget::class);
     }
-
-    // /**
-    //  * @return SubcategoryBudget[] Returns an array of SubcategoryBudget objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?SubcategoryBudget
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

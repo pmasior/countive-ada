@@ -15,20 +15,6 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/* TODO:
- *              "security" = "is_granted('CATEGORY_CREATE', object)"
- *              "security" = "is_granted('CATEGORY_RETRIEVE', object)"
- * use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
- * @ApiFilter(
- *     SearchFilter::class,
- *     properties={
- *          "name": "partial",
- *          "subcategories": "exact",
- *          "subcategories.name": "partial"
- *     }
- * )
-*/
-
 /**
  * @ApiResource(
  *     securityMessage="Only owner can perform this operation.",
@@ -93,7 +79,6 @@ class Category
      */
     private $icon;
 
-//     TODO: is needed? @Assert\Valid() (also in other entities)
     /**
      * @Assert\Valid()
      * @IsValidOwner()
