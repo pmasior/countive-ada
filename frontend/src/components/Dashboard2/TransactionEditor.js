@@ -149,11 +149,10 @@ export default function TransactionEditor(props) {
                           onChange={handleChange}>
                     <option value={""}>{""}</option>
                     {methodOfPayments.map(s => {
-                      if (s['@id'] === formState.methodOfPayment) {
-                        return <option value={s['@id']}>{s.name}</option>
-                      } else {
+                      if (s.settlementAccount === formState.settlementAccount) {
                         return <option value={s['@id']}>{s.name}</option>
                       }
+                      return null;
                     })}
                   </select>
                   <label>methodOfPayment</label>
