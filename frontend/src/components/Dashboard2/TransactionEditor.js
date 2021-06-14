@@ -88,11 +88,7 @@ export default function TransactionEditor(props) {
                           onChange={handleChange}>
                     <option value={""}>{""}</option>
                     {currencies.map(c => {
-                      if (c['@id'] === formState.currency) {
-                        return <option value={c['@id']}>{c.name}</option>
-                      } else {
-                        return <option value={c['@id']}>{c.name}</option>
-                      }
+                      return <option value={c['@id']}>{c.name}</option>
                     })}
                   </select>
                   <label>currency</label>
@@ -110,12 +106,7 @@ export default function TransactionEditor(props) {
                           value={formState.subcategory}
                           onChange={handleChange}>
                     {subcategories.map(s => {
-                      if (s['@id'] === formState.subcategory ||
-                          props.match.params.subcategory === s.name.toLowerCase()) {
-                        return <option value={s['@id']}>{s.name}</option>
-                      } else {
-                        return <option value={s['@id']}>{s.name}</option>
-                      }
+                      return <option value={s['@id']}>{s.name}</option>
                     })}
                   </select>
                   <label>subcategory</label>
@@ -133,11 +124,7 @@ export default function TransactionEditor(props) {
                           onChange={handleChange}>
                     <option value={""}>{""}</option>
                     {settlementAccounts.map(s => {
-                      if (s['@id'] === formState.settlementAccount) {
-                        return <option value={s['@id']}>{s.name}</option>
-                      } else {
-                        return <option value={s['@id']}>{s.name}</option>
-                      }
+                      return <option value={s['@id']}>{s.name}</option>
                     }
                     )}
                   </select>
@@ -156,7 +143,7 @@ export default function TransactionEditor(props) {
                     })}
                   </select>
                   <label>methodOfPayment</label>
-                </div>  {/* TODO: tylko dostępne metody płatności dla konta rozliczeniowego */}
+                </div>
               </div>
               <div className="modal-footer d-flex">
                 <button type="button" className="btn btn-danger"

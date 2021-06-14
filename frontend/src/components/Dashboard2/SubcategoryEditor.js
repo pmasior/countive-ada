@@ -65,14 +65,11 @@ export default function SubcategoryEditor(props) {
                 <div className="form-group form-floating mb-3">
                   <select className="form-select" name="icon" aria-label="icon"
                           required
+                          value={formState.icon}
                           onChange={handleChange}>
                     <option value={""}>{""}</option>
                     {icons.map(i => {
-                      if (i['@id'] === formState.icon) {
-                        return <option selected value={i['@id']}>{i.name}</option>
-                      } else {
-                        return <option value={i['@id']}>{i.name}</option>
-                      }
+                      return <option value={i['@id']}>{i.name}</option>
                     })}
                   </select>
                   <label>icon</label>
@@ -91,11 +88,7 @@ export default function SubcategoryEditor(props) {
                           onChange={handleChange}>
                     <option value={""}>{""}</option>
                     {categories.map(c => {
-                      if (c['@id'] === formState.category) {
-                        return <option selected value={c['@id']}>{c.name}</option>
-                      } else {
-                        return <option value={c['@id']}>{c.name}</option>
-                      }
+                      return <option value={c['@id']}>{c.name}</option>
                     })}
                   </select>
                   <label>category</label>
